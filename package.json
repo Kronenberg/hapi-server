@@ -18,8 +18,7 @@
     "node": ">=0.10.x"
   },
   "scripts": {
-    "start": "node main.js",
-    "postinstall": "npm install"
+    "start": "node main.js"
   },
   "devDependencies": {
     "bcrypt": "^1.0.2",
