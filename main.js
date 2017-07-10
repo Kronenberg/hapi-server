@@ -1,84 +1,90 @@
-var Hapi = require('hapi');
-var Joi = require('joi');
+'use strict';
 
+const Hapi = require('hapi');
+const Joi = require('Joi');
+const Boom = require('boom');
+const mongoose = require('mongoose');
+const glob = require('glob');
+const path = require('path');
+// @Run Hapi.js server in debug mode
+const server = new Hapi.Server({ debug: { request: ['error'] } });
 
-var internals = {};
+// @SERVER CONFIG FILE
+const config = require('./config/config');
 
+// @UTILS
+const parseUpTime = require('./helpers/parseUpTime');
 
-// Type shortcuts
-
-var S = Joi.string;
-var N = Joi.number;
-var A = Joi.array;
-
-
-
-internals.get = function (request, reply) {
-
-    reply('Success!\n');
+// @MONGO DB CONFIGURATIONS
+const dbUrl = `mongodb://${config.DBADMIN}:${config.DBPASSWORD}@ds139685.mlab.com:39685/kronendb`;
+const dbOpts = {
+    server: { poolSize: 5 },
+    db: { native_parser: true }
 };
 
-
-internals.output = function (request, reply) {
-
-    reply({ myOutput: request.query.input });
-};
+mongoose.Promise = global.Promise;
 
 
-internals.payload = function (request, reply) {
+// @ Servser port configurations
+const PORT = config.PORT;
+const HOST = 'localhost';
+server.connection({ port: PORT, host: HOST });
 
-    reply('Success!\n');
-};
 
+// @Here you can add some hapi.js plugins in array
+server.register([
+    {
+        register: require('hapi-geo-locate'),
+        options: {
+            enabledByDefault: true
+        }
+    },
+    {
+        register: require('hapi-auth-jwt')
+    }
+    ],  (err) => {
+    if (err) {
+        console.error(err);
+        throw err;
+    }
 
-internals.echo = function (request, reply) {
+    // @SET Auth0 Strategy
+    server.auth.strategy('jwt', 'jwt', {
+        key: config.SECRET_WEB_TOKEN,
+        verifyOptions: { algorithms: ['HS256'] }
+    });
 
-    reply(request.payload);
-};
+    glob.sync('api/**/routes/*.js', {
+        root: __dirname
+    }).forEach(file => {
+        const route = require(path.join(__dirname, file));
+        server.route(route);
+    });
 
-internals.redirect = function (request, reply) {
-
-    reply.redirect('/error');
-};
-
-internals.error = function (request, reply) {
-
-    reply('This is my error');
-};
-
-var server = new Hapi.Server(~~process.env.PORT || 3000, '0.0.0.0');
-
-server.route([
-    { method: 'GET', path: '/', config: { handler: internals.get, validate: { query: { username: S() } } } },
-    { method: 'POST', path: '/', config: { handler: internals.echo, payload: { parse: true } } },
-    { method: 'GET', path: '/admin', config: { handler: internals.get, validate: { query: { username: S().required(), password: S().required() } } } },
-    { method: 'GET', path: '/users', config: { handler: internals.get, validate: { query: { email: S().email().required().min(18) } } } },
-    { method: 'GET', path: '/config', config: { handler: internals.get, validate: { query: { choices: A().required() } } } },
-    { method: 'GET', path: '/test', config: { handler: internals.get, validate: { query: { num: N().min(0) } } } },
-    { method: 'GET', path: '/output', config: { handler: internals.output, validate: { query: { input: S().min(3) } } } },
-    { method: 'GET', path: '/users/{id}', config: { description: 'Get a user', handler: internals.get, validate: { params: { id: N().required() }, query: { name: S().description('the user name').required() } } } },
-    { method: 'GET', path: '/redirect', config: { handler: internals.redirect } },
-    { method: 'GET', path: '/error', config: { handler: internals.error } }
-]);
-
-var schema = Joi.object().keys({
-    title: S().required().invalid('director'),
-    status: S().required().valid('open', 'pending', 'close'),
-    participants: A().required().includes(S(), N()).min(2)
+    server.start((err) => {
+        var promise = mongoose.connect(dbUrl, {
+            useMongoClient: true
+            /* other options */
+        });
+        if (err) {
+            throw err;
+        }
+        console.log(`Server running at: ${server.info.uri}`);
+    });
 });
 
+
 server.route({
-    method: 'POST',
-    path: '/users/{id}',
+    method: 'GET',
+    path: '/',
     config: {
-        handler: internals.payload,
-        validate: {
-            payload: schema
+        handler:  (request, reply) => {
+            const upTime = process.uptime();
+            reply({
+                serverUpTime: parseUpTime.dayTimeFormat(upTime),
+                serverInfo: request.location
+            });
         }
     }
 });
 
-server.start(function () {
-
-    console.log('Server started at [' + server.info.uri + ']');
-});

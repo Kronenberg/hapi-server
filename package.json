@@ -18,6 +18,17 @@
     "node": ">=0.10.x"
   },
   "scripts": {
-    "start": "node main.js"
+    "start": "node main.js",
+    "dev": "nodemon main.js"
+  },
+  "devDependencies": {
+    "bcrypt": "^1.0.2",
+    "boom": "^5.1.0",
+    "glob": "^7.1.2",
+    "hapi-auth-jwt": "^4.0.0",
+    "hapi-geo-locate": "^2.2.0",
+    "hapi-mongodb": "^6.2.1",
+    "joi": "^10.6.0",
+    "mongoose": "^4.11.1"
   }
 }
