@@ -11,6 +11,7 @@ const config = require('./config/config');
 const server = new Hapi.Server();
 server.connection({ port: ~~process.env.PORT || 3000,  routes: { cors: true }  });
 // @SERVER CONFIG FILE
+// hello world
 
 // @UTILS
 const parseUpTime = require('./helpers/parseUpTime');
