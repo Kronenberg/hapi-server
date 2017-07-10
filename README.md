@@ -9,16 +9,16 @@ This application support by Hafetz Haim 8
 Make sure you have [Node.js](http://nodejs.org/) and the [Heroku CLI](https://cli.heroku.com/) installed.
 
 ```sh
-$ git clone https://github.com/Kronenberg/server.git # or clone your own fork
+$ git clone https://github.com/Kronenberg/hapi-server.git # or clone your own fork
 $ cd server
 $ npm install
 $ npm start
-$ npm run dev *
+$ npm run dev *not working now
 $ or better use this module nodemon (npm i -g nodemon)
 $ nodemon main.js
 ```
 
-Your app should now be running on [localhost:3000](http://localhost:5000/).
+Your app should now be running on [localhost:3000](http://localhost:3000/).
 
 #
 ## Documentation
