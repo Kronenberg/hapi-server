@@ -1,7 +1,6 @@
 'use strict';
 
 const Hapi = require('hapi');
-const Joi = require('Joi');
 const Boom = require('boom');
 const mongoose = require('mongoose');
 const glob = require('glob');
