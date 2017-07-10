@@ -28,8 +28,13 @@ mongoose.Promise = global.Promise;
 // @ Servser port configurations
 const PORT = config.PORT;
 const HOST = 'localhost';
-server.connection({ port: PORT, host: HOST });
-
+server.connection({
+    port: ~~process.env.PORT | config.PORT,
+    routes: { cors: {
+        credentials: true,
+        origin: ["*"]
+    } }
+});
 
 // @Here you can add some hapi.js plugins in array
 server.register([
