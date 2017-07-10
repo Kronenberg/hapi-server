@@ -7,7 +7,7 @@ const mongoose = require('mongoose');
 const glob = require('glob');
 const path = require('path');
 // @Run Hapi.js server in debug mode
-const server = new Hapi.Server({ debug: { request: ['error'] } });
+const server = new Hapi.Server(+process.env.PORT, '0.0.0.0');
 
 // @SERVER CONFIG FILE
 const config = require('./config/config');
