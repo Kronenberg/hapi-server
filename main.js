@@ -6,11 +6,19 @@ const Boom = require('boom');
 const mongoose = require('mongoose');
 const glob = require('glob');
 const path = require('path');
+const config = require('./config/config');
+
 // @Run Hapi.js server in debug mode
-const server = new Hapi.Server(~~process.env.PORT || 3000, '0.0.0.0');
+const server = new Hapi.Server();
+server.connection({
+    port: ~~process.env.PORT | config.PORT,
+    routes: { cors: {
+        credentials: true,
+        origin: ["*"]
+    } }
+});
 
 // @SERVER CONFIG FILE
-const config = require('./config/config');
 
 // @UTILS
 const parseUpTime = require('./helpers/parseUpTime');
@@ -28,13 +36,8 @@ mongoose.Promise = global.Promise;
 // @ Servser port configurations
 const PORT = config.PORT;
 const HOST = 'localhost';
-server.connection({
-    port: ~~process.env.PORT | config.PORT,
-    routes: { cors: {
-        credentials: true,
-        origin: ["*"]
-    } }
-});
+server.connection({ port: PORT, host: HOST });
+
 
 // @Here you can add some hapi.js plugins in array
 server.register([
@@ -74,7 +77,7 @@ server.register([
         if (err) {
             throw err;
         }
-        console.log(`Server running at: ${server.info.uri}`);
+        console.log(`Server running at`);
     });
 });
 
