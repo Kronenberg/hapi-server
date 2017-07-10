@@ -1,6 +1,6 @@
 # Kronen Server node.js
 
- Node.js app using [Hapi.js].
+ Node.js app using [Hapi.js](https://hapijs.com/).
 
 This application support by Hafetz Haim 8
 
