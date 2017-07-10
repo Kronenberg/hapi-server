@@ -10,7 +10,7 @@ const config = require('./config/config');
 // @Run Hapi.js server in debug mode
 const server = new Hapi.Server();
 server.connection({
-    port: ~~process.env.PORT | config.PORT,
+    port: ~~process.env.PORT || 8080,
     routes: { cors: {
         credentials: true,
         origin: ["*"]
