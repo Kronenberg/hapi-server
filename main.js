@@ -8,8 +8,8 @@ const path = require('path');
 const config = require('./config/config');
 
 // @Run Hapi.js server in debug mode
-const server = new Hapi.Server(~~process.env.PORT || 3000, '0.0.0.0');
-
+const server = new Hapi.Server();
+server.connection({ port: ~~process.env.PORT || 3000 });
 // @SERVER CONFIG FILE
 
 // @UTILS
