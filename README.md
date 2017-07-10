@@ -20,10 +20,8 @@ $ nodemon main.js
 
 Your app should now be running on [localhost:3000](http://localhost:3000/).
 
-#
-## Documentation
 
-# Remote link (latest deploy)
+## Link to heroku server (latest dev version)
 $ https://hidden-bastion.herokuapp.com/
 
 For more information about using Node.js on Heroku, see these Dev Center articles:
