@@ -8,7 +8,7 @@ const path = require('path');
 const config = require('./config/config');
 
 // @Run Hapi.js server in debug mode
-const server = new Hapi.Server(+process.env.PORT, '0.0.0.0');
+const server = new Hapi.Server(~~process.env.PORT || 3000, '0.0.0.0');
 
 // @SERVER CONFIG FILE
 
@@ -23,11 +23,6 @@ const dbOpts = {
 };
 
 mongoose.Promise = global.Promise;
-
-
-// @ Servser port configurations
-
-
 
 // @Here you can add some hapi.js plugins in array
 server.register([
