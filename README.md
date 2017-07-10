@@ -23,6 +23,9 @@ Your app should now be running on [localhost:3000](http://localhost:3000/).
 #
 ## Documentation
 
+# Remote link (latest deploy)
+$ https://hidden-bastion.herokuapp.com/
+
 For more information about using Node.js on Heroku, see these Dev Center articles:
 
  Цитата дня: не ну  [бл#$%](http://expressjs.com/) работало ж [бл#$%](http://expressjs.com/) 5 [су#$%](http://expressjs.com/) минут назад
